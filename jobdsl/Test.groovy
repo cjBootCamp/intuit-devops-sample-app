@@ -7,9 +7,12 @@ def allowedEnvironments = [
 	"stage",
 	"prod"
 ]
-
+def nextEnvIndex = 1
 
 for ( curEnv in allowedEnvironments ) {
+
+	nextEnv = (nextEnv < allowedEnvironments.size ( ) ? allowedEnvironments[nextEnvIndex] : '' )
+	nextEnv++
 
 	job ( "${YOUR_USER_NAME}Test${curEnv}" ) {
 
@@ -39,6 +42,20 @@ echo insert code here to execute your tests for your ${curEnv} environment
 echo
 	""")
 		}
+
+	if ( nextEnv != '' ) {
+			publishers {
+        		downstreamParameterized {
+            			trigger( "${YOUR_USER_NAME}Deploy${nextEnv}") {
+                		condition('UNSTABLE_OR_BETTER')
+                		parameters {
+                    		predefinedProp ( "ARTIFACT_S3_URL", "insert_s3_url" )
+                		}
+            		}
+        		}
+        	}
+	}
+
 	}
 
 }
