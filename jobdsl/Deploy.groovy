@@ -40,6 +40,18 @@ echo insert code here to run your cloudformation script to deploy to your ${curE
 echo
 	""")
 		}
+	
+	if ( curEnv != "prod" ) {
+			publishers {
+        		downstreamParameterized {
+            			trigger( "${YOUR_USER_NAME}Test${curEnv}") {
+                		condition('UNSTABLE_OR_BETTER')
+                		parameters {
+                    		predefinedProp ( "ARTIFACT_S3_URL", "insert_s3_url" )
+                		}
+            		}
+        		}
+        	}
 	}
-
+	}
 }
