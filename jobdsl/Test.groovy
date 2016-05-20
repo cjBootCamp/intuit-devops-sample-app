@@ -11,8 +11,8 @@ def nextEnvIndex = 1
 
 for ( curEnv in allowedEnvironments ) {
 
-	nextEnv = (nextEnv < allowedEnvironments.size ( ) ? allowedEnvironments[nextEnvIndex] : '' )
-	nextEnv++
+	def nextEnv = (nextEnv < allowedEnvironments.size ( ) ? allowedEnvironments[nextEnvIndex] : '' )
+	nextEnvIndex++
 
 	job ( "${YOUR_USER_NAME}Test${curEnv}" ) {
 
